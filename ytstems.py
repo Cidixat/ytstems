@@ -1,7 +1,34 @@
 import os
 import subprocess
+import json
 
 url = input("Enter YouTube URL: ")
+def get_video_title_with_subprocess(url):
+  try:
+    # Execute yt-dlp with options to dump JSON output
+    completed_process = subprocess.run(
+        ["yt-dlp", "--dump-json", url], capture_output=True, text=True
+    )
+
+    # Check for successful execution
+    if completed_process.returncode == 0:
+      try:
+        # Parse JSON data
+        data = json.loads(completed_process.stdout)
+        return data.get("title")
+      except json.JSONDecodeError:
+        print(f"Error parsing JSON output: {completed_process.stdout}")
+        return None
+    else:
+      print(f"Error executing yt-dlp: {completed_process.stderr}")
+      return None
+
+  except Exception as e:
+    print(f"Error extracting video title: {e}")
+    return None
+
+
+video_title = get_video_title_with_subprocess(url);
 
 def download_audio_from_youtube(url, output_dir):
     try:
@@ -21,7 +48,7 @@ def split_audio_with_demucs(input_audio, output_dir):
 
 if __name__ == "__main__":
     youtube_url = url
-    output_directory = "output_audio_tracks"
+    output_directory = video_title
 
     # Create output directory if it doesn't exist
     os.makedirs(output_directory, exist_ok=True)
