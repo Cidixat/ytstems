@@ -36,14 +36,14 @@ def download_audio_directly(url, output_dir):
 def split_audio_with_demucs(input_audio, output_dir):
     try:
         # Split audio using demucs
-        subprocess.run(["demucs", input_audio, "-o", output_dir])
+        subprocess.run(["demucs", input_audio, "-o", output_dir, "-n", "mdx_extra"])
         print("Audio split into separate tracks!")
     except Exception as e:
         print(f"Error splitting audio: {e}")
 
 if __name__ == "__main__":
     youtube_url = url
-    output_directory = video_title
+    output_directory = "processed"
 
     # Create output directory if it doesn't exist
     os.makedirs(output_directory, exist_ok=True)
