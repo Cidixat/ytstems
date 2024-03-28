@@ -34,9 +34,15 @@ def download_audio_directly(url, output_dir):
        print(f"Error downloading audio: {e}")
 
 def split_audio_with_demucs(input_audio, output_dir):
+    # Extract filename without extension
+    filename, _ = os.path.splitext(os.path.basename(input_audio))
+    # Create unique output directory with filename
+    unique_output_dir = os.path.join(output_dir, f"{filename}_demux")
+    os.makedirs(unique_output_dir, exist_ok=True)
+
     try:
-        # Split audio using demucs
-        subprocess.run(["demucs", input_audio, "-o", output_dir, "-n", "mdx_extra"])
+        # Split audio using demucs with the new directory
+        subprocess.run(["demucs", input_audio, "-o", unique_output_dir, "-n", "mdx_extra"])
         print("Audio split into separate tracks!")
     except Exception as e:
         print(f"Error splitting audio: {e}")
