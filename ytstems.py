@@ -57,6 +57,10 @@ if __name__ == "__main__":
     # Download audio from YouTube
     download_audio_directly(youtube_url, output_directory)
 
-    # Split audio into separate tracks using demucs
-    input_audio_file = f"{output_directory}/{os.listdir(output_directory)[0]}"
-    split_audio_with_demucs(input_audio_file, output_directory)
+    # Find the downloaded mp3 and split into stems
+    mp3_files = [f for f in os.listdir(output_directory) if f.endswith(".mp3")]
+    if not mp3_files:
+        print("No MP3 file found in output directory. Download may have failed.")
+    else:
+        input_audio_file = os.path.join(output_directory, mp3_files[0])
+        split_audio_with_demucs(input_audio_file, output_directory)
