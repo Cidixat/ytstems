@@ -1,10 +1,10 @@
 # ytstems
 
-A CLI tool that downloads audio from a YouTube URL and splits it into separate stems (vocals, drums, bass, other) using [Demucs](https://github.com/facebookresearch/demucs).
+Downloads audio from a YouTube URL and splits it into separate stems (vocals, drums, bass, other) using [Demucs](https://github.com/facebookresearch/demucs). Includes both a CLI and a Gradio web UI.
 
 ## How it works
 
-1. Prompts you for a YouTube URL
+1. Paste a YouTube URL into the web UI (or run via CLI)
 2. Downloads the best available audio as an MP3 via `yt-dlp`
 3. Runs `demucs` (mdx_extra model) to separate the audio into 4 stems
 4. Saves everything under the `processed/` directory
@@ -37,6 +37,13 @@ pip install -r requirements.txt
 
 ## Usage
 
+**Web UI**
+```bash
+python app.py
+# Opens at http://localhost:7860
+```
+
+**CLI**
 ```bash
 python ytstems.py
 # Enter YouTube URL: https://www.youtube.com/watch?v=...
@@ -50,3 +57,4 @@ python ytstems.py
 | demucs | AI-powered audio source separation |
 | torch / torchaudio | ML backend for demucs |
 | ffmpeg | Audio conversion |
+| gradio | Web UI |

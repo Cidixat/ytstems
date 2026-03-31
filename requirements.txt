@@ -4,6 +4,7 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
 cloudpickle==3.0.0
 demucs==4.0.1
+gradio>=4.0
 dora_search==0.1.12
 einops==0.7.0
 ffmpeg==1.4
