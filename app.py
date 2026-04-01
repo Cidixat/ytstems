@@ -26,22 +26,40 @@ def run(url, file, stem_option):
 
 
 CSS = """
-.gradio-container { max-width: 900px !important; margin: 40px auto !important; padding: 0 24px !important; }
+.gradio-container {
+    max-width: 900px !important;
+}
+.html-container {
+    padding: 0;
+}
 .step-box {
     border: 1px solid #e0e0e0;
     border-radius: 12px;
-    margin-bottom: 20px;
 }
 .step-inner {
-    padding: 24px 28px !important;
 }
 .step-header {
     font-size: 1.1rem;
     font-weight: 600;
-    padding: 16px;
     border-bottom: 1px solid #e0e0e0;
-    margin: 0;
+    padding-bottom: 16px;
+    margin-bottom: 16px !important;
 }
+.gr-group {
+    padding: 16px;
+}
+.row {
+    gap: 16px;
+}
+
+.form {
+    margin-top: 16px;
+}
+
+.file-upload-box {
+    margin-top: 16px;
+}
+
 """
 
 with gr.Blocks(title="YTStems", css=CSS) as demo:
@@ -60,7 +78,7 @@ with gr.Blocks(title="YTStems", css=CSS) as demo:
                 with gr.Column():
                     gr.Markdown("#### From a local file", elem_classes="source-header")
                     gr.Markdown("Upload an audio file (MP3, WAV, FLAC, etc.) to split into stems.")
-                    file_input = gr.File(label="Audio file", file_types=["audio"])
+                    file_input = gr.File(label="Audio file", file_types=["audio"], elem_classes="file-upload-box")
 
     # Step 2
     with gr.Group(elem_classes="step-box"):
