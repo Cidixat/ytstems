@@ -1,25 +1,28 @@
 # ytstems
 
-Downloads audio from a YouTube URL and splits it into separate stems (vocals, drums, bass, other) using [Demucs](https://github.com/facebookresearch/demucs). Includes both a CLI and a Gradio web UI.
+Downloads audio from a YouTube URL and splits it into separate stems using [Demucs](https://github.com/facebookresearch/demucs). Includes both a CLI and a Gradio web UI.
 
 ## How it works
 
 1. Paste a YouTube URL into the web UI (or run via CLI)
 2. Downloads the best available audio as an MP3 via `yt-dlp`
-3. Runs `demucs` (mdx_extra model) to separate the audio into 4 stems
+3. Runs `demucs` to separate the audio into stems
 4. Saves everything under the `processed/` directory
+
+Choose between two modes:
+- 4-stem — vocals, drums, bass, other (`htdemucs_ft`)
+- 6-stem — vocals, drums, bass, other, guitar, piano (`htdemucs_6s`)
 
 Output structure:
 ```
 processed/
-  <video title>.mp3
-  <video title>_demux/
-    mdx_extra/
-      <video title>/
-        vocals.wav
-        drums.wav
-        bass.wav
-        other.wav
+  <video title>/
+    <video title>.mp3
+    htdemucs_ft/
+      vocals.wav
+      drums.wav
+      bass.wav
+      other.wav
 ```
 
 ## Requirements
