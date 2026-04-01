@@ -1,6 +1,14 @@
 import os
+import shutil
 import subprocess
 from yt_dlp import YoutubeDL
+
+
+MODELS = {
+    "4-stem — fast (vocals, drums, bass, other)": "htdemucs",
+    "4-stem — best quality (vocals, drums, bass, other)": "htdemucs_ft",
+    "6-stem — best quality, piano experimental (vocals, drums, bass, other, guitar, piano)": "htdemucs_6s",
+}
 
 
 def download_audio(url, output_dir="processed"):
@@ -33,23 +41,27 @@ def download_audio(url, output_dir="processed"):
 
 
 def split_stems(input_audio, track_dir, model="htdemucs_ft"):
+    # Use a temp dir so demucs doesn't nest inside track_dir directly
+    tmp_dir = os.path.join(track_dir, "_tmp_demucs")
     subprocess.run(
-        ["demucs", input_audio, "-o", track_dir, "-n", model],
+        ["demucs", input_audio, "-o", tmp_dir, "-n", model],
         check=True
     )
+    # demucs outputs to: tmp_dir/<model>/<filename>/
     filename, _ = os.path.splitext(os.path.basename(input_audio))
-    nested_dir = os.path.join(track_dir, model, filename)
+    nested_dir = os.path.join(tmp_dir, model, filename)
     stems_dir = os.path.join(track_dir, model)
+    os.makedirs(stems_dir, exist_ok=True)
 
-    # Flatten: move wav files up one level, remove the nested folder
+    # Move wav files to track_dir/<model>/
     for f in os.listdir(nested_dir):
-        os.rename(os.path.join(nested_dir, f), os.path.join(stems_dir, f))
-    os.rmdir(nested_dir)
+        shutil.move(os.path.join(nested_dir, f), os.path.join(stems_dir, f))
+    shutil.rmtree(tmp_dir)
 
     return stems_dir
 
 
-def process(url, stem_option="4-stem (vocals, drums, bass, other)", output_dir="processed"):
+def process(url, stem_option="4-stem — fast (vocals, drums, bass, other)", output_dir="processed"):
     model = MODELS[stem_option]
     mp3_path, track_dir = download_audio(url, output_dir)
     stems_dir = split_stems(mp3_path, track_dir, model)
