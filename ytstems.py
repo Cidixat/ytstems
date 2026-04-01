@@ -68,6 +68,20 @@ def process(url, stem_option="4-stem — fast (vocals, drums, bass, other)", out
     return mp3_path, stems_dir
 
 
+def process_file(file_path, stem_option="4-stem — fast (vocals, drums, bass, other)", output_dir="processed"):
+    model = MODELS[stem_option]
+    filename, _ = os.path.splitext(os.path.basename(file_path))
+    track_dir = os.path.join(output_dir, filename)
+    os.makedirs(track_dir, exist_ok=True)
+
+    # Copy the uploaded file into the track folder
+    dest = os.path.join(track_dir, os.path.basename(file_path))
+    shutil.copy(file_path, dest)
+
+    stems_dir = split_stems(dest, track_dir, model)
+    return dest, stems_dir
+
+
 if __name__ == "__main__":
     url = input("Enter YouTube URL: ")
     mp3, stems = process(url)
